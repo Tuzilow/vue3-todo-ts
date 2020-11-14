@@ -13,8 +13,30 @@
 </template>
 
 <script lang="ts">
-import { Todo } from '@/App.vue';
+import { Todo } from '@/types';
 import { defineComponent, ref } from 'vue';
+
+function useEmitAddTodo(
+  tid: string,
+  emit: (event: string, ...args: unknown[]) => void
+) {
+  const todoContent = ref('');
+
+  const emitAddTodo = () => {
+    const todo: Todo = {
+      id: tid,
+      content: todoContent.value,
+      completed: false,
+    };
+    emit('add-todo', todo);
+    todoContent.value = '';
+  };
+
+  return {
+    todoContent,
+    emitAddTodo,
+  };
+}
 
 export default defineComponent({
   name: 'TodoAdd',
@@ -27,22 +49,7 @@ export default defineComponent({
   },
 
   setup(props, context) {
-    const todoContent = ref('');
-
-    const emitAddTodo = () => {
-      const todo: Todo = {
-        id: props.tid,
-        content: todoContent.value,
-        completed: false,
-      };
-      context.emit('add-todo', todo);
-      todoContent.value = '';
-    };
-
-    return {
-      todoContent,
-      emitAddTodo,
-    };
+    return useEmitAddTodo(props.tid, context.emit);
   },
 });
 </script>
