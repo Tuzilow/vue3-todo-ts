@@ -1,5 +1,7 @@
 # vue-todo-ts
 
+本项目是学习Vue3、Composition API的Demo
+
 ## Project setup
 ```
 npm install
